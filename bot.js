@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, PermissionFlagsBits } from "discord.js";
 
-const CHANNELS = (process.env.CHANNEL_IDS || "1571004587509293136,1571114150690557972")
+const CHANNELS = (process.env.CHANNEL_IDS || "1571004587509293136,1571114150690557972,1571300200050462822")
   .split(",")
   .map((x) => x.trim())
   .filter(Boolean);
