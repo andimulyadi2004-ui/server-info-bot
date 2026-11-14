@@ -1,6 +1,9 @@
 import { Client, GatewayIntentBits, PermissionFlagsBits } from "discord.js";
 
-const CHANNEL_ID = process.env.CHANNEL_ID || "1571004587509293136";
+const CHANNELS = (process.env.CHANNEL_IDS || "1571004587509293136,1571114150690557972")
+  .split(",")
+  .map((x) => x.trim())
+  .filter(Boolean);
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
@@ -14,7 +17,7 @@ function boleh(msg, member) {
 }
 
 client.on("messageCreate", async (msg) => {
-  if (msg.channelId !== CHANNEL_ID || !msg.guild) return;
+  if (!CHANNELS.includes(msg.channelId) || !msg.guild) return;
   const member =
     msg.member ?? (await msg.guild.members.fetch(msg.author.id).catch(() => null));
   if (boleh(msg, member)) return;
