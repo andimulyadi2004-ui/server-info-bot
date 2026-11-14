@@ -1,0 +1,38 @@
+name: bot
+on:
+  workflow_dispatch:
+    inputs:
+      sisa:
+        description: "Sisa sesi"
+        default: "12"
+permissions:
+  actions: write
+  contents: read
+concurrency:
+  group: bot
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 358
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install
+      - name: Antri sesi berikutnya
+        run: |
+          S=${{ inputs.sisa }}
+          if [ "$S" -gt 1 ]; then gh workflow run bot.yml -f sisa=$((S-1)); fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+      - run: |
+          END=$((SECONDS+21000))
+          while [ $SECONDS -lt $END ]; do
+            timeout $((END-SECONDS)) node bot.js || true
+            sleep 5
+          done
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
