@@ -10,6 +10,7 @@ const client = new Client({
 
 function boleh(msg, member) {
   if (msg.author.id === client.user.id) return true;
+  if (msg.author.bot) return true;
   if (msg.guild.ownerId === msg.author.id) return true;
   if (!member) return false;
   if (member.permissions.has(PermissionFlagsBits.Administrator)) return true;
